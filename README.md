@@ -1,50 +1,36 @@
-# Meu Financeiro — PWA
+# Meu Financeiro — PWA V2.2
 
-Aplicativo pessoal de controle financeiro, pensado para celular.
+Aplicativo pessoal de controle financeiro, pensado para celular e funcionamento offline.
 
-## Recursos desta versão
-- Dashboard com saldo, entradas e gastos do mês
-- Lançamentos de receitas e despesas
-- Categorias
-- Vencimentos
-- Gastos recorrentes
-- Cadastro de cartões
-- Orçamento mensal por categoria
-- Backup e restauração em JSON
-- Instalação como PWA
-- Funcionamento offline após o primeiro acesso
-- Dados salvos localmente no navegador
+## Novidades da V2.2
+- Contas financeiras com saldo inicial e saldo calculado
+- Lançamentos em débito/Pix, dinheiro ou cartão de crédito
+- Uso normal sem cartão de crédito: basta escolher Débito / Pix e a conta
+- Edição de lançamentos
+- Exclusão com confirmação e opção de desfazer
+- Filtros por mês, categoria, tipo e conta/cartão
+- Navegação entre meses no dashboard e orçamento
+- Categorias personalizadas com renomeação
+- Recorrências mensais automáticas até a data atual
+- Dashboard com orçamento consumido e maior categoria de gastos
+- Cartões opcionais com cálculo da fatura aberta pelo ciclo de fechamento/vencimento
+- Backup JSON com metadados, versão e compatibilidade com backups antigos
+- Migração automática dos dados da V2.1 sem apagar o armazenamento existente
 
-## Como testar no computador
-Você precisa servir a pasta por HTTP. Exemplo com Python:
+## Como lançar uma compra no débito
+1. Toque em Novo lançamento.
+2. Escolha Gasto.
+3. Em Forma de pagamento, escolha Débito / Pix.
+4. Escolha a conta de onde o dinheiro saiu.
+5. Salve.
 
-    python -m http.server 8000
+O valor é descontado imediatamente do saldo da conta. Não é necessário cadastrar cartão de crédito.
 
-Depois abra:
-    http://localhost:8000
-
-## Como instalar no celular
-Para instalação como aplicativo, publique a pasta em um endereço HTTPS.
-Opções gratuitas comuns:
-- GitHub Pages
-- Netlify
-- Vercel
-
-Depois abra o endereço no celular e use "Adicionar à tela inicial" ou o botão "Instalar", quando disponível.
+## Publicação
+A pasta pode ser publicada diretamente no GitHub Pages. Substitua os arquivos da versão anterior pelos arquivos desta versão e mantenha a pasta `icons`.
 
 ## Segurança
-Esta primeira versão NÃO conecta com bancos e NÃO usa Open Finance.
-Os dados ficam no armazenamento local do navegador/aparelho.
-Use o botão de backup periodicamente.
+A V2.2 ainda armazena os dados localmente no navegador/aparelho. Não há conexão bancária nem Open Finance. Faça backups periódicos.
 
-## Próximos passos possíveis
-- Login e sincronização entre aparelhos
-- Banco de dados online
-- Importação CSV/OFX
-- Parcelamento de compras
-- Faturas separadas por cartão
-- Contas bancárias
-- Metas
-- Gráficos avançados
-- Chat financeiro
-- Integração Open Finance por provedor autorizado
+## Próxima etapa sugerida
+A V3 pode adicionar login, banco de dados online e sincronização entre dispositivos preservando a estrutura de contas, cartões, categorias e recorrências criada nesta versão.

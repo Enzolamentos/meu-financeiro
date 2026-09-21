@@ -23,108 +23,119 @@
 
     <main id="view-home" class="view active">
       <section class="hero-card">
-        <div class="muted">Saldo total</div>
-        <div id="totalBalance" class="hero-value">R$ 0,00</div>
+        <div class="hero-headline">
+          <div>
+            <div class="muted">Saldo disponível</div>
+            <div id="totalBalance" class="hero-value">R$ 0,00</div>
+          </div>
+          <button class="hero-link" data-view="accounts">Contas</button>
+        </div>
         <div class="hero-grid">
-          <div>
-            <span>Entradas</span>
-            <strong id="monthIncome">R$ 0,00</strong>
-          </div>
-          <div>
-            <span>Gastos</span>
-            <strong id="monthExpense">R$ 0,00</strong>
-          </div>
+          <div><span>Entradas do mês</span><strong id="monthIncome">R$ 0,00</strong></div>
+          <div><span>Gastos do mês</span><strong id="monthExpense">R$ 0,00</strong></div>
         </div>
       </section>
 
-      <section class="quick-grid">
-        <button class="quick-card" data-open="transaction">
-          <span class="quick-icon">＋</span>
-          <span>Novo lançamento</span>
-        </button>
-        <button class="quick-card" data-open="card">
-          <span class="quick-icon">💳</span>
-          <span>Novo cartão</span>
-        </button>
+      <section class="month-switcher" aria-label="Selecionar mês">
+        <button id="prevMonthBtn" class="icon-btn month-btn" aria-label="Mês anterior">‹</button>
+        <button id="monthLabel" class="month-label" type="button" title="Voltar para o mês atual"></button>
+        <button id="nextMonthBtn" class="icon-btn month-btn" aria-label="Próximo mês">›</button>
+      </section>
+
+      <section class="quick-grid four">
+        <button class="quick-card" data-open="transaction"><span class="quick-icon">＋</span><span>Novo lançamento</span></button>
+        <button class="quick-card" data-open="account"><span class="quick-icon">▤</span><span>Nova conta</span></button>
+        <button class="quick-card" data-view="budget"><span class="quick-icon">◎</span><span>Orçamento</span></button>
+        <button class="quick-card" data-view="cards"><span class="quick-icon">▣</span><span>Cartões</span></button>
+      </section>
+
+      <section class="summary-grid">
+        <div class="summary-card"><span>Orçamento usado</span><strong id="budgetUsage">—</strong><small id="budgetUsageSub">Sem limites definidos</small></div>
+        <div class="summary-card"><span>Maior categoria</span><strong id="topCategory">—</strong><small id="topCategorySub">Sem gastos no mês</small></div>
       </section>
 
       <section class="panel">
-        <div class="section-head">
-          <h2>Este mês</h2>
-          <span id="monthLabel" class="muted"></span>
-        </div>
+        <div class="section-head"><h2>Gastos por categoria</h2><button class="text-btn" data-view="transactions">Ver movimentos</button></div>
         <div id="categoryBars" class="bars"></div>
       </section>
 
       <section class="panel">
-        <div class="section-head">
-          <h2>Próximos vencimentos</h2>
-        </div>
+        <div class="section-head"><h2>Próximos vencimentos</h2></div>
         <div id="upcomingList" class="list"></div>
       </section>
     </main>
 
     <main id="view-transactions" class="view">
       <div class="section-head sticky-head">
-        <div>
-          <div class="eyebrow">MOVIMENTAÇÕES</div>
-          <h2>Lançamentos</h2>
-        </div>
+        <div><div class="eyebrow">MOVIMENTAÇÕES</div><h2>Lançamentos</h2></div>
         <button class="primary-btn" data-open="transaction">Adicionar</button>
       </div>
-      <div class="filters">
-        <input id="searchInput" type="search" placeholder="Buscar..." />
-        <select id="typeFilter">
-          <option value="all">Todos</option>
-          <option value="income">Entradas</option>
-          <option value="expense">Gastos</option>
-        </select>
+      <div class="filters filters-wide">
+        <input id="searchInput" type="search" placeholder="Buscar descrição..." />
+        <select id="typeFilter"><option value="all">Todos os tipos</option><option value="income">Entradas</option><option value="expense">Gastos</option></select>
+        <input id="monthFilter" type="month" />
+        <select id="categoryFilter"><option value="all">Todas as categorias</option></select>
+        <select id="sourceFilter"><option value="all">Todas as contas/cartões</option></select>
       </div>
       <div id="transactionList" class="list"></div>
     </main>
 
+    <main id="view-accounts" class="view">
+      <div class="section-head sticky-head">
+        <div><div class="eyebrow">CONTAS</div><h2>Minhas contas</h2></div>
+        <button class="primary-btn" data-open="account">Adicionar</button>
+      </div>
+      <div class="panel compact-info"><strong>Débito / Pix</strong><p class="muted">Gastos no débito ou Pix saem imediatamente da conta escolhida. Você não precisa cadastrar cartão de crédito.</p></div>
+      <div id="accountsList" class="accounts-list"></div>
+    </main>
+
     <main id="view-cards" class="view">
       <div class="section-head sticky-head">
-        <div>
-          <div class="eyebrow">CARTÕES</div>
-          <h2>Meus cartões</h2>
-        </div>
+        <div><div class="eyebrow">CARTÕES</div><h2>Cartões de crédito</h2></div>
         <button class="primary-btn" data-open="card">Adicionar</button>
       </div>
+      <div class="panel compact-info"><strong>Opcional</strong><p class="muted">Se você usa apenas débito, deixe esta área vazia. No lançamento, escolha “Débito / Pix”.</p></div>
       <div id="cardsList" class="cards-list"></div>
     </main>
 
     <main id="view-budget" class="view">
       <div class="section-head sticky-head">
-        <div>
-          <div class="eyebrow">ORÇAMENTO</div>
-          <h2>Limites por categoria</h2>
-        </div>
+        <div><div class="eyebrow">ORÇAMENTO</div><h2>Limites por categoria</h2></div>
         <button class="primary-btn" data-open="budget">Definir</button>
+      </div>
+      <div class="month-switcher inline-month">
+        <button id="budgetPrevMonthBtn" class="icon-btn month-btn">‹</button>
+        <span id="budgetMonthLabel" class="month-label"></span>
+        <button id="budgetNextMonthBtn" class="icon-btn month-btn">›</button>
       </div>
       <div id="budgetList" class="list"></div>
     </main>
 
     <main id="view-settings" class="view">
       <section class="panel">
-        <div class="eyebrow">DADOS</div>
-        <h2>Backup e restauração</h2>
-        <p class="muted">Seus dados ficam salvos neste aparelho. Faça backup periodicamente.</p>
+        <div class="eyebrow">ORGANIZAÇÃO</div><h2>Categorias</h2>
+        <p class="muted">Crie, renomeie e organize suas categorias.</p>
+        <form id="categoryForm" class="category-add">
+          <input id="categoryName" maxlength="40" autocomplete="off" placeholder="Ex.: Pets, Viagens, Investimentos" />
+          <button class="primary-btn" type="submit">Adicionar</button>
+        </form>
+        <div id="categoryList" class="category-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="eyebrow">DADOS</div><h2>Backup e restauração</h2>
+        <p class="muted">O backup agora inclui versão, data de exportação e validação antes da restauração.</p>
         <div class="stack">
           <button id="exportBtn" class="primary-btn wide">Exportar backup</button>
-          <label class="secondary-btn wide file-label">
-            Importar backup
-            <input id="importInput" type="file" accept=".json,application/json" hidden />
-          </label>
+          <label class="secondary-btn wide file-label">Importar backup<input id="importInput" type="file" accept=".json,application/json" hidden /></label>
           <button id="seedBtn" class="secondary-btn wide">Carregar dados de exemplo</button>
           <button id="clearBtn" class="danger-btn wide">Apagar todos os dados</button>
         </div>
       </section>
 
       <section class="panel">
-        <div class="eyebrow">SOBRE</div>
-        <h2>Meu Financeiro</h2>
-        <p class="muted">PWA pessoal de controle financeiro. Funciona offline depois do primeiro acesso.</p>
+        <div class="eyebrow">SOBRE</div><h2>Meu Financeiro</h2>
+        <p class="muted">PWA pessoal · V2.2. Funciona offline depois do primeiro acesso.</p>
       </section>
     </main>
 
@@ -132,60 +143,80 @@
       <button class="nav-btn active" data-view="home"><span>⌂</span><small>Início</small></button>
       <button class="nav-btn" data-view="transactions"><span>↕</span><small>Movimentos</small></button>
       <button class="nav-btn fab" data-open="transaction" aria-label="Novo lançamento">＋</button>
-      <button class="nav-btn" data-view="cards"><span>▣</span><small>Cartões</small></button>
+      <button class="nav-btn" data-view="accounts"><span>▤</span><small>Contas</small></button>
       <button class="nav-btn" data-view="settings"><span>⚙</span><small>Ajustes</small></button>
     </nav>
   </div>
 
   <dialog id="transactionDialog">
-    <form method="dialog" id="transactionForm" class="modal-form">
-      <div class="modal-head">
-        <h3>Novo lançamento</h3>
-        <button type="button" class="icon-btn" data-close>✕</button>
-      </div>
+    <form id="transactionForm" class="modal-form">
+      <div class="modal-head"><h3 id="transactionDialogTitle">Novo lançamento</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="txEditId" type="hidden" />
       <div class="segmented">
         <label><input type="radio" name="txType" value="expense" checked><span>Gasto</span></label>
         <label><input type="radio" name="txType" value="income"><span>Entrada</span></label>
       </div>
       <label>Descrição<input id="txDescription" required placeholder="Ex.: Mercado" /></label>
       <label>Valor<input id="txAmount" required inputmode="decimal" placeholder="0,00" /></label>
-      <label>Categoria
-        <select id="txCategory"></select>
+      <label>Categoria<select id="txCategory"></select></label>
+      <label id="paymentMethodLabel">Forma de pagamento
+        <select id="txPaymentMethod">
+          <option value="debit">Débito / Pix</option>
+          <option value="cash">Dinheiro</option>
+          <option value="credit">Cartão de crédito</option>
+        </select>
       </label>
+      <label id="accountField">Conta<select id="txAccount"></select></label>
+      <label id="cardField" class="hidden">Cartão de crédito<select id="txCard"></select></label>
       <label>Data<input id="txDate" required type="date" /></label>
       <label>Vencimento opcional<input id="txDueDate" type="date" /></label>
-      <label class="check-row"><input id="txRecurring" type="checkbox" /> Repetir mensalmente</label>
-      <button class="primary-btn wide" value="default">Salvar</button>
+      <label class="check-row"><input id="txRecurring" type="checkbox" /> Repetir mensalmente de forma automática</label>
+      <button class="primary-btn wide" type="submit">Salvar</button>
+    </form>
+  </dialog>
+
+  <dialog id="accountDialog">
+    <form id="accountForm" class="modal-form">
+      <div class="modal-head"><h3 id="accountDialogTitle">Nova conta</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="accountEditId" type="hidden" />
+      <label>Nome<input id="accountName" required placeholder="Ex.: Nubank, Itaú, Carteira" /></label>
+      <label>Tipo<select id="accountType"><option value="checking">Conta corrente / digital</option><option value="savings">Poupança</option><option value="cash">Dinheiro / carteira</option><option value="investment">Investimentos</option></select></label>
+      <label>Saldo inicial<input id="accountOpeningBalance" inputmode="decimal" placeholder="0,00" /></label>
+      <button class="primary-btn wide" type="submit">Salvar conta</button>
     </form>
   </dialog>
 
   <dialog id="cardDialog">
-    <form method="dialog" id="cardForm" class="modal-form">
-      <div class="modal-head">
-        <h3>Novo cartão</h3>
-        <button type="button" class="icon-btn" data-close>✕</button>
-      </div>
-      <label>Nome<input id="cardName" required placeholder="Ex.: Nubank" /></label>
+    <form id="cardForm" class="modal-form">
+      <div class="modal-head"><h3 id="cardDialogTitle">Novo cartão de crédito</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="cardEditId" type="hidden" />
+      <label>Nome<input id="cardName" required placeholder="Ex.: Nubank Crédito" /></label>
       <label>Limite<input id="cardLimit" required inputmode="decimal" placeholder="5000,00" /></label>
       <label>Dia de fechamento<input id="cardClose" type="number" min="1" max="31" value="5" /></label>
       <label>Dia de vencimento<input id="cardDue" type="number" min="1" max="31" value="12" /></label>
-      <button class="primary-btn wide" value="default">Salvar</button>
+      <button class="primary-btn wide" type="submit">Salvar cartão</button>
     </form>
   </dialog>
 
   <dialog id="budgetDialog">
-    <form method="dialog" id="budgetForm" class="modal-form">
-      <div class="modal-head">
-        <h3>Definir orçamento</h3>
-        <button type="button" class="icon-btn" data-close>✕</button>
-      </div>
+    <form id="budgetForm" class="modal-form">
+      <div class="modal-head"><h3>Definir orçamento</h3><button type="button" class="icon-btn" data-close>✕</button></div>
       <label>Categoria<select id="budgetCategory"></select></label>
       <label>Limite mensal<input id="budgetAmount" required inputmode="decimal" placeholder="800,00" /></label>
-      <button class="primary-btn wide" value="default">Salvar</button>
+      <button class="primary-btn wide" type="submit">Salvar</button>
     </form>
   </dialog>
 
-  <div id="toast" class="toast"></div>
+  <dialog id="renameCategoryDialog">
+    <form id="renameCategoryForm" class="modal-form">
+      <div class="modal-head"><h3>Renomear categoria</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="renameCategoryOld" type="hidden" />
+      <label>Novo nome<input id="renameCategoryName" maxlength="40" required /></label>
+      <button class="primary-btn wide" type="submit">Salvar</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast"><span id="toastText"></span><button id="toastAction" class="toast-action hidden" type="button"></button></div>
   <script src="app.js"></script>
 </body>
 </html>
