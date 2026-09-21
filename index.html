@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Meu Financeiro</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">CONTROLE FINANCEIRO</div>
+        <h1>Meu Financeiro</h1>
+      </div>
+      <button id="installBtn" class="ghost-btn hidden">Instalar</button>
+    </header>
+
+    <main id="view-home" class="view active">
+      <section class="hero-card">
+        <div class="muted">Saldo total</div>
+        <div id="totalBalance" class="hero-value">R$ 0,00</div>
+        <div class="hero-grid">
+          <div>
+            <span>Entradas</span>
+            <strong id="monthIncome">R$ 0,00</strong>
+          </div>
+          <div>
+            <span>Gastos</span>
+            <strong id="monthExpense">R$ 0,00</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-grid">
+        <button class="quick-card" data-open="transaction">
+          <span class="quick-icon">＋</span>
+          <span>Novo lançamento</span>
+        </button>
+        <button class="quick-card" data-open="card">
+          <span class="quick-icon">💳</span>
+          <span>Novo cartão</span>
+        </button>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>Este mês</h2>
+          <span id="monthLabel" class="muted"></span>
+        </div>
+        <div id="categoryBars" class="bars"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>Próximos vencimentos</h2>
+        </div>
+        <div id="upcomingList" class="list"></div>
+      </section>
+    </main>
+
+    <main id="view-transactions" class="view">
+      <div class="section-head sticky-head">
+        <div>
+          <div class="eyebrow">MOVIMENTAÇÕES</div>
+          <h2>Lançamentos</h2>
+        </div>
+        <button class="primary-btn" data-open="transaction">Adicionar</button>
+      </div>
+      <div class="filters">
+        <input id="searchInput" type="search" placeholder="Buscar..." />
+        <select id="typeFilter">
+          <option value="all">Todos</option>
+          <option value="income">Entradas</option>
+          <option value="expense">Gastos</option>
+        </select>
+      </div>
+      <div id="transactionList" class="list"></div>
+    </main>
+
+    <main id="view-cards" class="view">
+      <div class="section-head sticky-head">
+        <div>
+          <div class="eyebrow">CARTÕES</div>
+          <h2>Meus cartões</h2>
+        </div>
+        <button class="primary-btn" data-open="card">Adicionar</button>
+      </div>
+      <div id="cardsList" class="cards-list"></div>
+    </main>
+
+    <main id="view-budget" class="view">
+      <div class="section-head sticky-head">
+        <div>
+          <div class="eyebrow">ORÇAMENTO</div>
+          <h2>Limites por categoria</h2>
+        </div>
+        <button class="primary-btn" data-open="budget">Definir</button>
+      </div>
+      <div id="budgetList" class="list"></div>
+    </main>
+
+    <main id="view-settings" class="view">
+      <section class="panel">
+        <div class="eyebrow">DADOS</div>
+        <h2>Backup e restauração</h2>
+        <p class="muted">Seus dados ficam salvos neste aparelho. Faça backup periodicamente.</p>
+        <div class="stack">
+          <button id="exportBtn" class="primary-btn wide">Exportar backup</button>
+          <label class="secondary-btn wide file-label">
+            Importar backup
+            <input id="importInput" type="file" accept=".json,application/json" hidden />
+          </label>
+          <button id="seedBtn" class="secondary-btn wide">Carregar dados de exemplo</button>
+          <button id="clearBtn" class="danger-btn wide">Apagar todos os dados</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="eyebrow">SOBRE</div>
+        <h2>Meu Financeiro</h2>
+        <p class="muted">PWA pessoal de controle financeiro. Funciona offline depois do primeiro acesso.</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-view="home"><span>⌂</span><small>Início</small></button>
+      <button class="nav-btn" data-view="transactions"><span>↕</span><small>Movimentos</small></button>
+      <button class="nav-btn fab" data-open="transaction" aria-label="Novo lançamento">＋</button>
+      <button class="nav-btn" data-view="cards"><span>▣</span><small>Cartões</small></button>
+      <button class="nav-btn" data-view="settings"><span>⚙</span><small>Ajustes</small></button>
+    </nav>
+  </div>
+
+  <dialog id="transactionDialog">
+    <form method="dialog" id="transactionForm" class="modal-form">
+      <div class="modal-head">
+        <h3>Novo lançamento</h3>
+        <button type="button" class="icon-btn" data-close>✕</button>
+      </div>
+      <div class="segmented">
+        <label><input type="radio" name="txType" value="expense" checked><span>Gasto</span></label>
+        <label><input type="radio" name="txType" value="income"><span>Entrada</span></label>
+      </div>
+      <label>Descrição<input id="txDescription" required placeholder="Ex.: Mercado" /></label>
+      <label>Valor<input id="txAmount" required inputmode="decimal" placeholder="0,00" /></label>
+      <label>Categoria
+        <select id="txCategory"></select>
+      </label>
+      <label>Data<input id="txDate" required type="date" /></label>
+      <label>Vencimento opcional<input id="txDueDate" type="date" /></label>
+      <label class="check-row"><input id="txRecurring" type="checkbox" /> Repetir mensalmente</label>
+      <button class="primary-btn wide" value="default">Salvar</button>
+    </form>
+  </dialog>
+
+  <dialog id="cardDialog">
+    <form method="dialog" id="cardForm" class="modal-form">
+      <div class="modal-head">
+        <h3>Novo cartão</h3>
+        <button type="button" class="icon-btn" data-close>✕</button>
+      </div>
+      <label>Nome<input id="cardName" required placeholder="Ex.: Nubank" /></label>
+      <label>Limite<input id="cardLimit" required inputmode="decimal" placeholder="5000,00" /></label>
+      <label>Dia de fechamento<input id="cardClose" type="number" min="1" max="31" value="5" /></label>
+      <label>Dia de vencimento<input id="cardDue" type="number" min="1" max="31" value="12" /></label>
+      <button class="primary-btn wide" value="default">Salvar</button>
+    </form>
+  </dialog>
+
+  <dialog id="budgetDialog">
+    <form method="dialog" id="budgetForm" class="modal-form">
+      <div class="modal-head">
+        <h3>Definir orçamento</h3>
+        <button type="button" class="icon-btn" data-close>✕</button>
+      </div>
+      <label>Categoria<select id="budgetCategory"></select></label>
+      <label>Limite mensal<input id="budgetAmount" required inputmode="decimal" placeholder="800,00" /></label>
+      <button class="primary-btn wide" value="default">Salvar</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
