@@ -44,7 +44,7 @@
 
       <section class="quick-grid four">
         <button class="quick-card" data-open="transaction"><span class="quick-icon">＋</span><span>Novo lançamento</span></button>
-        <button class="quick-card" data-open="account"><span class="quick-icon">▤</span><span>Nova conta</span></button>
+        <button class="quick-card" data-view="investments"><span class="quick-icon">◆</span><span>Investimentos</span></button>
         <button class="quick-card" data-view="budget"><span class="quick-icon">◎</span><span>Orçamento</span></button>
         <button class="quick-card" data-view="cards"><span class="quick-icon">▣</span><span>Cartões</span></button>
       </section>
@@ -52,6 +52,8 @@
       <section class="summary-grid">
         <div class="summary-card"><span>Orçamento usado</span><strong id="budgetUsage">—</strong><small id="budgetUsageSub">Sem limites definidos</small></div>
         <div class="summary-card"><span>Maior categoria</span><strong id="topCategory">—</strong><small id="topCategorySub">Sem gastos no mês</small></div>
+        <div class="summary-card investment-home-card" data-view="investments"><span>Investimentos</span><strong id="homeInvestments">R$ 0,00</strong><small id="homeInvestmentsSub">Nenhum investimento</small></div>
+        <div class="summary-card"><span>Patrimônio estimado</span><strong id="netWorth">R$ 0,00</strong><small id="netWorthSub">Contas + investimentos</small></div>
       </section>
 
       <section class="panel">
@@ -98,6 +100,54 @@
       <div id="cardsList" class="cards-list"></div>
     </main>
 
+    <main id="view-investments" class="view">
+      <div class="section-head sticky-head">
+        <div><div class="eyebrow">INVESTIMENTOS</div><h2>Minha carteira</h2></div>
+        <button class="primary-btn" data-open="investment">Adicionar</button>
+      </div>
+
+      <section class="investment-kpis">
+        <div class="investment-kpi"><span>Total aplicado</span><strong id="investmentCostTotal" class="investment-kpi-value">R$ 0,00</strong></div>
+        <div class="investment-kpi"><span>Valor atual</span><strong id="investmentCurrentTotal" class="investment-kpi-value">R$ 0,00</strong></div>
+        <div class="investment-kpi"><span>Resultado total</span><strong id="investmentResultTotal" class="investment-kpi-value">R$ 0,00</strong><small id="investmentResultSub">Sem posições</small></div>
+        <div class="investment-kpi"><span>Rendimentos recebidos</span><strong id="investmentIncomeTotal" class="investment-kpi-value">R$ 0,00</strong></div>
+      </section>
+
+      <section class="panel compact-info">
+        <strong>Como organizar</strong>
+        <p class="muted">Cadastre o investimento e depois registre cada compra, venda, aporte, resgate ou rendimento. Quantidade, preço médio e total aplicado passam a ser calculados pelo histórico. O preço ou valor atual continua sendo informado manualmente.</p>
+        <div class="preset-grid">
+          <button type="button" class="preset-btn" data-investment-preset="reserve">Cofrinho / reserva</button>
+          <button type="button" class="preset-btn" data-investment-preset="fixed_income">Renda fixa</button>
+          <button type="button" class="preset-btn" data-investment-preset="fii">FII</button>
+          <button type="button" class="preset-btn" data-investment-preset="etf">ETF</button>
+          <button type="button" class="preset-btn" data-investment-preset="stock">Ação</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head"><h2>Distribuição por classe</h2></div>
+        <div id="investmentAllocation" class="bars"></div>
+      </section>
+
+      <div class="filters investment-filters">
+        <input id="investmentSearch" type="search" placeholder="Buscar ativo ou instituição..." />
+        <select id="investmentTypeFilter">
+          <option value="all">Todas as classes</option>
+          <option value="reserve">Reserva / Cofrinho</option>
+          <option value="fixed_income">Renda fixa</option>
+          <option value="fii">FII</option>
+          <option value="etf">ETF</option>
+          <option value="stock">Ação</option>
+          <option value="fund">Fundo de investimento</option>
+          <option value="crypto">Criptoativo</option>
+          <option value="other">Outro</option>
+        </select>
+      </div>
+      <div id="investmentList" class="investment-list"></div>
+      <section class="panel compact-info investment-disclaimer"><strong>Importante</strong><p class="muted">Esta área organiza seus próprios dados. Ela não recomenda ativos nem consulta cotações em tempo real.</p></section>
+    </main>
+
     <main id="view-budget" class="view">
       <div class="section-head sticky-head">
         <div><div class="eyebrow">ORÇAMENTO</div><h2>Limites por categoria</h2></div>
@@ -135,7 +185,7 @@
 
       <section class="panel">
         <div class="eyebrow">SOBRE</div><h2>Meu Financeiro</h2>
-        <p class="muted">PWA pessoal · V2.2. Funciona offline depois do primeiro acesso.</p>
+        <p class="muted">PWA pessoal · V2.4. Funciona offline depois do primeiro acesso.</p>
       </section>
     </main>
 
@@ -195,6 +245,69 @@
       <label>Dia de fechamento<input id="cardClose" type="number" min="1" max="31" value="5" /></label>
       <label>Dia de vencimento<input id="cardDue" type="number" min="1" max="31" value="12" /></label>
       <button class="primary-btn wide" type="submit">Salvar cartão</button>
+    </form>
+  </dialog>
+
+  <dialog id="investmentDialog">
+    <form id="investmentForm" class="modal-form">
+      <div class="modal-head"><h3 id="investmentDialogTitle">Novo investimento</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="investmentEditId" type="hidden" />
+      <label>Classe
+        <select id="investmentType">
+          <option value="reserve">Reserva / Cofrinho</option>
+          <option value="fixed_income">Renda fixa</option>
+          <option value="fii">FII</option>
+          <option value="etf">ETF</option>
+          <option value="stock">Ação</option>
+          <option value="fund">Fundo de investimento</option>
+          <option value="crypto">Criptoativo</option>
+          <option value="other">Outro</option>
+        </select>
+      </label>
+      <label>Forma de controle
+        <select id="investmentMode">
+          <option value="value">Por valor total</option>
+          <option value="units">Por quantidade e preço</option>
+        </select>
+      </label>
+      <label>Nome<input id="investmentName" required maxlength="70" placeholder="Ex.: Reserva de emergência, Fundo XPTO" /></label>
+      <label>Código / ticker opcional<input id="investmentTicker" maxlength="20" autocapitalize="characters" placeholder="Ex.: ABCD11" /></label>
+      <label>Instituição<input id="investmentInstitution" maxlength="50" list="investmentInstitutions" placeholder="Ex.: Nubank, Inter, corretora" /></label>
+      <datalist id="investmentInstitutions"><option value="Nubank"></option><option value="Inter"></option><option value="Itaú"></option><option value="BTG Pactual"></option><option value="XP"></option><option value="Rico"></option><option value="Clear"></option><option value="Banco do Brasil"></option><option value="Caixa"></option><option value="Mercado Pago"></option></datalist>
+      <div id="investmentUnitFields" class="investment-field-group hidden">
+        <label>Preço atual por unidade<input id="investmentCurrentPrice" inputmode="decimal" placeholder="0,00" /></label>
+        <div class="form-hint">Quantidade e preço médio serão calculados pelas compras e vendas registradas no histórico.</div>
+      </div>
+      <div id="investmentValueFields" class="investment-field-group">
+        <label>Valor atual<input id="investmentCurrentValue" inputmode="decimal" placeholder="0,00" /></label>
+        <div class="form-hint">O total aplicado será calculado pelos aportes e resgates registrados no histórico.</div>
+      </div>
+      <label>Data de início<input id="investmentStartDate" type="date" /></label>
+      <label>Observações<input id="investmentNotes" maxlength="140" placeholder="Opcional" /></label>
+      <div class="form-hint">Depois de salvar, use “+ Operação” para registrar compras, vendas, aportes, resgates e rendimentos.</div>
+      <button class="primary-btn wide" type="submit">Salvar investimento</button>
+    </form>
+  </dialog>
+
+  <dialog id="investmentOperationDialog">
+    <form id="investmentOperationForm" class="modal-form">
+      <div class="modal-head"><h3 id="investmentOperationDialogTitle">Nova operação</h3><button type="button" class="icon-btn" data-close>✕</button></div>
+      <input id="investmentOperationInvestmentId" type="hidden" />
+      <input id="investmentOperationEditId" type="hidden" />
+      <div id="investmentOperationAsset" class="operation-asset"></div>
+      <label>Tipo de operação<select id="investmentOperationType"></select></label>
+      <label>Data<input id="investmentOperationDate" type="date" required /></label>
+      <div id="investmentOperationUnitFields" class="investment-field-group">
+        <label>Quantidade<input id="investmentOperationQuantity" inputmode="decimal" placeholder="Ex.: 10" /></label>
+        <label>Preço por unidade<input id="investmentOperationUnitPrice" inputmode="decimal" placeholder="0,00" /></label>
+        <label>Taxas / custos opcionais<input id="investmentOperationFees" inputmode="decimal" placeholder="0,00" /></label>
+      </div>
+      <div id="investmentOperationAmountField" class="investment-field-group hidden">
+        <label><span id="investmentOperationAmountLabel">Valor</span><input id="investmentOperationAmount" inputmode="decimal" placeholder="0,00" /></label>
+      </div>
+      <label>Observação<input id="investmentOperationNotes" maxlength="120" placeholder="Opcional" /></label>
+      <div id="investmentOperationHint" class="form-hint"></div>
+      <button class="primary-btn wide" type="submit">Salvar operação</button>
     </form>
   </dialog>
 

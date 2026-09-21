@@ -1,36 +1,33 @@
-# Meu Financeiro — PWA V2.2
+# Meu Financeiro — PWA V2.4
 
-Aplicativo pessoal de controle financeiro, pensado para celular e funcionamento offline.
+Aplicativo pessoal de controle financeiro, pensado para celular e uso offline.
 
-## Novidades da V2.2
-- Contas financeiras com saldo inicial e saldo calculado
-- Lançamentos em débito/Pix, dinheiro ou cartão de crédito
-- Uso normal sem cartão de crédito: basta escolher Débito / Pix e a conta
-- Edição de lançamentos
-- Exclusão com confirmação e opção de desfazer
-- Filtros por mês, categoria, tipo e conta/cartão
-- Navegação entre meses no dashboard e orçamento
-- Categorias personalizadas com renomeação
-- Recorrências mensais automáticas até a data atual
-- Dashboard com orçamento consumido e maior categoria de gastos
-- Cartões opcionais com cálculo da fatura aberta pelo ciclo de fechamento/vencimento
-- Backup JSON com metadados, versão e compatibilidade com backups antigos
-- Migração automática dos dados da V2.1 sem apagar o armazenamento existente
+## Novidades da V2.4 — histórico de investimentos
+- Compras e vendas registradas individualmente para FII, ETF, ações, cripto e outros ativos por quantidade
+- Aportes e resgates para Cofrinhos, Reservas, Renda Fixa e investimentos controlados por valor
+- Proventos / rendimentos registrados separadamente
+- Quantidade atual calculada automaticamente pelas operações
+- Preço médio calculado automaticamente pelas compras e vendas
+- Custo atual da posição calculado automaticamente
+- Resultado realizado em vendas calculado pelo preço médio da posição
+- Resultado total considera valorização/desvalorização, resultado realizado e rendimentos
+- Histórico por investimento, com edição e exclusão de operações
+- Migração automática das posições cadastradas na V2.3 para uma operação inicial, preservando os dados existentes
+- Preço atual ou valor atual continua sendo informado manualmente
 
-## Como lançar uma compra no débito
-1. Toque em Novo lançamento.
-2. Escolha Gasto.
-3. Em Forma de pagamento, escolha Débito / Pix.
-4. Escolha a conta de onde o dinheiro saiu.
-5. Salve.
+## Recursos mantidos
+- Dashboard financeiro e patrimônio estimado
+- Receitas e despesas
+- Contas e pagamentos por Débito/Pix ou Dinheiro
+- Cartões de crédito opcionais com ciclo de fechamento e vencimento
+- Categorias personalizáveis
+- Recorrências mensais automáticas
+- Orçamento por categoria
+- Backup e restauração em JSON
+- PWA e funcionamento offline
 
-O valor é descontado imediatamente do saldo da conta. Não é necessário cadastrar cartão de crédito.
-
-## Publicação
-A pasta pode ser publicada diretamente no GitHub Pages. Substitua os arquivos da versão anterior pelos arquivos desta versão e mantenha a pasta `icons`.
+## Observação sobre investimentos
+A área de investimentos é um organizador dos dados informados pelo próprio usuário. Ela não consulta cotações em tempo real e não recomenda ativos.
 
 ## Segurança
-A V2.2 ainda armazena os dados localmente no navegador/aparelho. Não há conexão bancária nem Open Finance. Faça backups periódicos.
-
-## Próxima etapa sugerida
-A V3 pode adicionar login, banco de dados online e sincronização entre dispositivos preservando a estrutura de contas, cartões, categorias e recorrências criada nesta versão.
+Os dados continuam armazenados localmente no navegador/aparelho. Não envie seus arquivos de backup JSON para um repositório público.
